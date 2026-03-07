@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         videoGrid.innerHTML = "";
 
         // Update Counter
-        resultCount.textContent = `${filteredVideos.length} Video Ditemukan`;
+        resultCount.textContent = `${filteredVideos.length} Video${filteredVideos.length !== 1 ? 's' : ''} Found`;
 
         if (filteredVideos.length === 0) {
             emptyState.classList.remove("hidden");
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Format Date (Optional utility)
             const dateObj = new Date(video.date);
-            const formattedDate = dateObj.toLocaleDateString("id-ID", { year: 'numeric', month: 'long', day: 'numeric' });
+            const formattedDate = dateObj.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
 
             // High Res YouTube Thumbnail
             const thumbUrl = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
@@ -143,63 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Theme Toggle
-        themeToggle.addEventListener("click", () => {
-            document.body.classList.toggle("light-mode");
-            const isLight = document.body.classList.contains("light-mode");
-            localStorage.setItem("theme", isLight ? "light" : "dark");
-
-            // Toggle Icon
-            const iconElement = themeToggle.querySelector("i");
-            if (isLight) {
-                iconElement.setAttribute("data-lucide", "sun");
-            } else {
-                iconElement.setAttribute("data-lucide", "moon");
-            }
-            lucide.createIcons({
-                nameAttr: 'data-lucide',
-                attrs: {
-                    class: 'lucide'
-                }
-            });
-            // Update single icon
-            const newIcon = createElement(isLight ? window.lucide.icons.Sun : window.lucide.icons.Moon);
-            themeToggle.innerHTML = '';
-            themeToggle.appendChild(newIcon);
-        });
-    }
-
-    // Helper to render lucide raw svg for toggle
-    function createElement(iconNode) {
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        for (const [attr, val] of Object.entries(iconNode[1])) {
-            svg.setAttribute(attr, val);
-        }
-        svg.setAttribute('width', '24');
-        svg.setAttribute('height', '24');
-        svg.setAttribute('fill', 'none');
-        svg.setAttribute('stroke', 'currentColor');
-        svg.setAttribute('stroke-width', '2');
-        svg.setAttribute('stroke-linecap', 'round');
-        svg.setAttribute('stroke-linejoin', 'round');
-
-        iconNode[2].forEach(child => {
-            const childNode = document.createElementNS('http://www.w3.org/2000/svg', child[0]);
-            for (const [attr, val] of Object.entries(child[1])) {
-                childNode.setAttribute(attr, val);
-            }
-            svg.appendChild(childNode);
-        });
-        return svg;
-    }
-
-    function checkTheme() {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "light") {
-            document.body.classList.add("light-mode");
-            themeToggle.innerHTML = '';
-            themeToggle.appendChild(createElement(window.lucide.icons.Sun));
-        }
     }
 
     // Run

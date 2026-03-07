@@ -1,18 +1,18 @@
 /* ========== VARIABLES ========== */
 :root {
-    /* Color Palette - Premium Dark Default */
-    --bg-base: #0a0a0c;
-    --bg-surface: #141418;
-    --bg-glass: rgba(20, 20, 24, 0.7);
-    --border-glass: rgba(255, 255, 255, 0.08);
+    /* Color Palette - Hearts2Hub Light Blue/White Default */
+    --bg-base: #f4f9fc;
+    --bg-surface: #ffffff;
+    --bg-glass: rgba(255, 255, 255, 0.9);
+    --border-glass: rgba(166, 217, 247, 0.4);
 
-    --text-main: #ffffff;
-    --text-muted: #9ba0a6;
+    --text-main: #091a28;
+    --text-muted: #627b8f;
 
-    --accent-color: #a6d9f7;
-    /* Hearts2Hearts Light Blue */
-    --accent-hover: #88ccf5;
-    --accent-glow: rgba(166, 217, 247, 0.3);
+    --accent-color: #7abdec;
+    /* Hearts2Hub Blue */
+    --accent-hover: #5aa1d9;
+    --accent-glow: rgba(122, 189, 236, 0.3);
 
     --card-radius: 16px;
     --btn-radius: 24px;
@@ -20,17 +20,6 @@
     /* Typography */
     --font-sans: 'Inter', sans-serif;
     --font-heading: 'Outfit', sans-serif;
-}
-
-/* Light Mode Variables - Blue and White Branding */
-body.light-mode {
-    --bg-base: #f4f9fc;
-    --bg-surface: #ffffff;
-    --bg-glass: rgba(255, 255, 255, 0.9);
-    --border-glass: rgba(166, 217, 247, 0.4);
-    --text-main: #091a28;
-    --text-muted: #627b8f;
-    --accent-glow: rgba(166, 217, 247, 0.3);
 }
 
 /* ========== RESET & BASE ========== */
@@ -91,6 +80,11 @@ body {
 
 .logo span {
     color: var(--accent-color);
+}
+
+#theme-toggle {
+    display: none;
+    /* Hide toggle since we only use one theme */
 }
 
 .icon-btn {
@@ -271,13 +265,13 @@ body {
 .play-icon {
     width: 48px;
     height: 48px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(4px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--accent-color);
     transform: scale(0.8);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
