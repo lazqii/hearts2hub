@@ -1339,3 +1339,31 @@ const categories = [
     "Facecam",
     "2025 Holiday Vlogs"
 ];
+
+// Define Eras
+const eras = [
+    {
+        id: "the-chase",
+        name: "The Chase Era",
+        startDate: "2025-02-22",
+        endDate: "2025-06-13"
+    },
+    {
+        id: "style",
+        name: "Style Era",
+        startDate: "2025-06-17",
+        endDate: "2025-09-22"
+    },
+    {
+        id: "focus",
+        name: "Focus Era",
+        startDate: "2025-09-26",
+        endDate: "2026-02-09"
+    },
+    {
+        id: "rude",
+        name: "Rude! Era",
+        startDate: "2026-02-12",
+        endDate: "9999-12-31" // Present
+    }
+];
