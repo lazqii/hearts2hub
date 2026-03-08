@@ -12,30 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeModalBtn = document.getElementById("close-modal");
     const modalTitle = document.getElementById("modal-title");
     const youtubePlayer = document.getElementById("youtube-player");
-
-    // Add Video Elements
-    const addVideoBtn = document.getElementById("add-video-btn");
-    const addVideoModal = document.getElementById("add-video-modal");
-    const closeAddModalBtn = document.getElementById("close-add-modal");
-
-    // Form Elements
-    const ytUrlInput = document.getElementById("yt-url-input");
-    const fetchYtBtn = document.getElementById("fetch-yt-btn");
-    const previewCard = document.getElementById("video-preview-data");
-    const previewThumb = document.getElementById("preview-thumbnail");
-    const editTitle = document.getElementById("edit-title-input");
-    const editDate = document.getElementById("edit-date-input");
-    const editCategory = document.getElementById("edit-category-select");
-    const generatedGroup = document.getElementById("generated-code-group");
-    const generatedOutput = document.getElementById("generated-code-output");
-    const copyCodeBtn = document.getElementById("copy-code-btn");
-    const generateCodeBtn = document.getElementById("generate-code-btn");
-    const addModalActions = document.getElementById("add-modal-actions");
-
     // State
     let currentCategory = "All";
     let currentSearchTerm = "";
-    let extractedVideoIds = [];
     let currentEraFilter = null;
 
     // 1. Initialize App
@@ -54,13 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.textContent = category;
             btn.dataset.category = category;
 
-            // Populate Dropdown in Add Video form at the same time
-            if (category !== "All") {
-                const opt = document.createElement("option");
-                opt.value = category;
-                opt.textContent = category;
-                editCategory.appendChild(opt);
-            }
 
             btn.addEventListener("click", () => {
                 // Remove active class from all
@@ -302,100 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 closeModal();
             }
         });
-
-        // Add Video Listeners
-        addVideoBtn.addEventListener("click", () => {
-            // Reset form
-            ytUrlInput.value = "";
-            previewCard.classList.add("hidden");
-            generatedGroup.classList.add("hidden");
-            addModalActions.classList.add("hidden");
-            addModalActions.classList.add("hidden");
-            extractedVideoIds = [];
-
-            addVideoModal.classList.add("active");
-            document.body.style.overflow = "hidden";
-        });
-
-        closeAddModalBtn.addEventListener("click", () => {
-            addVideoModal.classList.remove("active");
-            document.body.style.overflow = "";
-        });
-
-        fetchYtBtn.addEventListener("click", () => {
-            const url = ytUrlInput.value.trim();
-            if (!url) return;
-
-            // Extract IDs
-            let videoIds = [];
-            const regex = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/g;
-            let match;
-
-            while ((match = regex.exec(url)) !== null) {
-                if (!videoIds.includes(match[1])) {
-                    videoIds.push(match[1]);
-                }
-            }
-
-            if (videoIds.length > 0) {
-                extractedVideoIds = videoIds;
-
-                // Auto fill dummy data for preview using the first video
-                previewThumb.src = `https://img.youtube.com/vi/${videoIds[0]}/mqdefault.jpg`;
-
-                if (videoIds.length > 1) {
-                    editTitle.value = `Bulk Import (${videoIds.length} Videos)`;
-                } else {
-                    editTitle.value = "New Video Title";
-                }
-
-                // Set date to today
-                editDate.value = new Date().toISOString().split('T')[0];
-
-                previewCard.classList.remove("hidden");
-                addModalActions.classList.remove("hidden");
-                generatedGroup.classList.add("hidden");
-            } else {
-                alert("Please enter a valid YouTube URL");
-            }
-        });
-
-        generateCodeBtn.addEventListener("click", () => {
-            if (!extractedVideoIds || extractedVideoIds.length === 0) return;
-
-            const baseTitle = editTitle.value || "Untitled Video";
-            const date = editDate.value || new Date().toISOString().split('T')[0];
-            const category = editCategory.value || categories[1];
-
-            let combinedJsObjects = "";
-
-            extractedVideoIds.forEach((id, index) => {
-                const titleStr = extractedVideoIds.length > 1 ? `${baseTitle} (Part ${index + 1})` : baseTitle;
-                combinedJsObjects += `{
-    id: "${id}",
-    title: "${titleStr}",
-    date: "${date}",
-    category: "${category}"
-},\n`;
-            });
-
-            generatedOutput.textContent = combinedJsObjects;
-            generatedGroup.classList.remove("hidden");
-        });
-
-        copyCodeBtn.addEventListener("click", () => {
-            const code = generatedOutput.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                const originalIcon = copyCodeBtn.innerHTML;
-                copyCodeBtn.innerHTML = '<i data-lucide="check" style="color:var(--accent-color)"></i>';
-                lucide.createIcons();
-                setTimeout(() => {
-                    copyCodeBtn.innerHTML = originalIcon;
-                    lucide.createIcons();
-                }, 2000);
-            });
-        });
-
     }
 
     // Run
