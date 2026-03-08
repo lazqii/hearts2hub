@@ -60,7 +60,63 @@
             <h3>Oops, no videos found!</h3>
             <p>Try using different keywords.</p>
         </div>
+        <!-- Add Video Floating Button -->
+        <button id="add-video-btn" class="fab-btn" aria-label="Add New Video">
+            <i data-lucide="plus"></i>
+        </button>
     </main>
+
+    <!-- Modal Form: Add Video Wizard -->
+    <div id="add-video-modal" class="modal-overlay hidden">
+        <div class="modal-content form-content">
+            <div class="modal-header">
+                <h3>Add New YouTube Video</h3>
+                <button id="close-add-modal" class="icon-btn close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body p-20">
+                <p class="text-muted mb-16">Paste one or multiple YouTube URLs below (separated by commas or new lines)
+                    to automatically generate the batch video data format for your <code>data.js</code> file.</p>
+
+                <div class="input-group mb-16">
+                    <label for="yt-url-input">YouTube URL(s)</label>
+                    <div class="input-with-btn" style="flex-direction: column;">
+                        <textarea id="yt-url-input"
+                            placeholder="https://www.youtube.com/watch?v=...\nhttps://youtu.be/..." rows="4"
+                            style="padding: 12px; border-radius: var(--card-radius); border: 1px solid var(--border-glass); font-family: var(--font-sans); resize: vertical;"></textarea>
+                        <button id="fetch-yt-btn" class="primary-btn">Fetch Data</button>
+                    </div>
+                </div>
+
+                <!-- Preview Area -->
+                <div id="video-preview-data" class="preview-card hidden mb-16">
+                    <img id="preview-thumbnail" src="" alt="Thumbnail Preview" class="preview-thumb">
+                    <div class="preview-info">
+                        <input type="text" id="edit-title-input" class="edit-input" placeholder="Video Title">
+                        <input type="date" id="edit-date-input" class="edit-input">
+                        <select id="edit-category-select" class="edit-input">
+                            <!-- Categories populated via JS -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group mb-16 hidden" id="generated-code-group">
+                    <label>Generated Code (Copy to data.js)</label>
+                    <div class="code-container">
+                        <pre><code id="generated-code-output"></code></pre>
+                        <button id="copy-code-btn" class="icon-btn copy-btn" title="Copy to Clipboard">
+                            <i data-lucide="copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-actions hidden" id="add-modal-actions">
+                    <button id="generate-code-btn" class="primary-btn w-full">Generate JS Code</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal Player Player YouTube -->
     <div id="video-modal" class="modal-overlay hidden">
