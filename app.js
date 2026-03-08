@@ -59,7 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const dateObj = new Date(video.date);
         const formattedDate = dateObj.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
-        const thumbUrl = `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`;
+        // Use maxresdefault for highest available quality, fallbacks automatically handled by youtube if missing
+        const thumbUrl = `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
 
         card.innerHTML = `
             <div class="video-thumbnail">
