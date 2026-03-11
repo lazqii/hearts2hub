@@ -40,11 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 btn.classList.add("active");
                 currentCategory = category;
                 currentEraFilter = null; // Reset era when changing category
-                
+
                 // Clear search logic gracefully
                 searchInput.value = "";
                 currentSearchTerm = "";
-                
+
                 renderVideos();
             });
 
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const dateObj = new Date(video.date);
         const formattedDate = dateObj.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
         // Use maxresdefault for highest available quality, fallbacks automatically handled by youtube if missing
-        const thumbUrl = `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
+        const thumbUrl = `https://img.youtube.com/vi/${video.id}/sddefault.jpg`;
 
         card.innerHTML = `
             <div class="video-thumbnail">
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let filteredVideos = videoArchive.filter(video => {
             const matchCategory = currentCategory === "All" || video.category === currentCategory;
             const matchSearch = video.title.toLowerCase().includes(currentSearchTerm.toLowerCase());
-            
+
             // Era filter check
             let matchEra = true;
             if (currentEraFilter) {
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     matchEra = vDate >= eStart && vDate <= eEnd;
                 }
             }
-            
+
             return matchCategory && matchSearch && matchEra;
         });
 
@@ -130,30 +130,30 @@ document.addEventListener("DOMContentLoaded", () => {
         if (isHomePage) {
             // Group by Era
             let renderedErasCount = 0;
-            
+
             // eras list is usually chronological but let's reverse iteration to show newest first 
             const sortedEras = [...eras].reverse();
-            
+
             sortedEras.forEach(era => {
                 // Filter main list again just for this Era
                 const vDateStart = new Date(era.startDate);
                 const vDateEnd = new Date(era.endDate);
-                
+
                 const videosInEra = filteredVideos.filter(video => {
                     const videoDate = new Date(video.date);
                     return videoDate >= vDateStart && videoDate <= vDateEnd;
                 });
-                
+
                 if (videosInEra.length > 0) {
                     renderedErasCount++;
-                    
+
                     // Create Era Wrapper
                     const eraWrapper = document.createElement("div");
                     eraWrapper.className = "era-section mb-16";
-                    
+
                     // Header
                     // Header structure with optional View All button
-                    const viewAllHTML = videosInEra.length > 10 ? 
+                    const viewAllHTML = videosInEra.length > 10 ?
                         `<button class="view-all-btn" data-era="${era.id}">View All <i data-lucide="arrow-right" width="16" height="16"></i></button>` : '';
 
                     eraWrapper.innerHTML = `
@@ -166,44 +166,44 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         <div class="inner-era-grid"></div>
                     `;
-                    
+
                     const innerGrid = eraWrapper.querySelector('.inner-era-grid');
-                    
+
                     // Slice to max 10
                     const videosToRender = videosInEra.slice(0, 10);
                     videosToRender.forEach(video => {
                         innerGrid.appendChild(createVideoCard(video));
                     });
-                    
+
                     // Attach event listener to View All button if it exists
                     const viewAllBtn = eraWrapper.querySelector('.view-all-btn');
                     if (viewAllBtn) {
                         viewAllBtn.addEventListener("click", () => {
                             currentEraFilter = era.id;
                             renderVideos();
-                            window.scrollTo(0,0);
+                            window.scrollTo(0, 0);
                         });
                     }
-                    
+
                     videoGrid.appendChild(eraWrapper);
                 }
             });
-            
+
             // Fallback for videos that don't match any era (pre-debut or edge cases)
             // Skipped for now, assuming all videos fall into an era or we just don't show edge cases in Era view.
-            
+
         } else {
             // Standard Flat Grid view for filters/search/era-view
-            
+
             // If we are specifically viewing an Era, add a back button at the top
             if (currentEraFilter) {
                 const activeEraObj = eras.find(e => e.id === currentEraFilter);
-                if(activeEraObj) {
+                if (activeEraObj) {
                     const eraTitleHeader = document.createElement("div");
                     eraTitleHeader.className = "era-page-header";
                     eraTitleHeader.style.gridColumn = "1 / -1"; // span full width
                     eraTitleHeader.style.marginBottom = "24px";
-                    
+
                     eraTitleHeader.innerHTML = `
                         <button id="back-to-eras-btn" class="view-all-btn" style="margin-bottom: 20px;">
                             <i data-lucide="arrow-left" width="16" height="16"></i> Back to All Eras
@@ -212,27 +212,27 @@ document.addEventListener("DOMContentLoaded", () => {
                         <p class="text-muted" style="margin-top: 8px;">Showing all ${filteredVideos.length} videos from this era.</p>
                     `;
                     videoGrid.appendChild(eraTitleHeader);
-                    
+
                     // Attach event listener immediately after adding to DOM
                     setTimeout(() => {
                         const backBtn = document.getElementById("back-to-eras-btn");
-                        if(backBtn) {
+                        if (backBtn) {
                             backBtn.addEventListener("click", () => {
                                 currentEraFilter = null;
                                 // find 'All' category button and simulate click to reset UI state properly
                                 const allBtn = document.querySelector('.filter-btn[data-category="All"]');
-                                if(allBtn) {
+                                if (allBtn) {
                                     allBtn.click();
                                 } else {
                                     renderVideos();
                                 }
-                                window.scrollTo(0,0);
+                                window.scrollTo(0, 0);
                             });
                         }
                     }, 0);
                 }
             }
-            
+
             videoGrid.style.display = "grid";
             filteredVideos.forEach(video => {
                 videoGrid.appendChild(createVideoCard(video));
